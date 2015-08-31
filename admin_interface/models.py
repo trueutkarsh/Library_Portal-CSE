@@ -6,7 +6,7 @@ from django.db import models
 class Author(models.Model):#author can be of both books or rearchpaper
 	first_name=models.CharField(max_length=30)#max len can be changed
 	last_name=models.CharField(max_length=40)
-	website=models.URLField(null=True)#empty values means no website
+	website=models.URLField(blank=True)#empty values means no website
 	#books=models.ManyToManyField(Book,null=True)
 	#researchpaper=models.ManytoManyField(Research_paper,null=True)
 	
@@ -20,7 +20,7 @@ class Publisher(models.Model):
 	city=models.CharField(max_length=20)
 	state=models.CharField(max_length=20,null=True)
 	country=models.CharField(max_length=40)
-	website=models.URLField(null=True)
+	website=models.URLField(blank=True)
 	#books=models.ManyToManyField(Book)
 
 	def __unicode__(self):
@@ -33,7 +33,7 @@ class Course(models.Model):
 	#books=models.ManyToManyField(Book)
 
 	def __unicode__(self):
-		return	(id+name)
+		return	(self.id+self.name)
 
 
 '''#can be implemented if such data can be collected
@@ -49,15 +49,15 @@ class Research_paper(models.Model):
 	authors=models.ManyToManyField(Author)
 
 	def __unicode__(self):
-		return title
+		return self.title
 
 class Book(models.Model):
 	title=models.CharField(max_length=100)
-	website=models.URLField()
+	website=models.URLField(blank=True)
 	edition=models.IntegerField()	
 	authors=models.ManyToManyField(Author)
 	publisher=models.ManyToManyField(Publisher)
-	courses=models.ManyToManyField(Course)
+	courses=models.ManyToManyField(Course,blank=True)
    #uid=models.CharField(max_length=10)-to be implemented
    #after deciding how to do it.
    #sections=models.ManyToManyField(Book) 

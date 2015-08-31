@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'admin_interface',
+    'admin_interface','search',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -52,11 +52,11 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'Library_Portal.urls'
-
+#make template paths realtive
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['/home/trueutkarsh/Django Projects/Library_Portal/search/template'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
