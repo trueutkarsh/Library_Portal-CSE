@@ -16,9 +16,9 @@ Including another URLconf
 #from search import views
 from django.conf.urls import include, url
 from django.contrib import admin
-from search import views as search_view
+from search import views 
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^search/',search_view.searchit),
+    url(r'^search/',views.searchit),
 ]
