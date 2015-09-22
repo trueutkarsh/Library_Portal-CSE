@@ -1,11 +1,12 @@
-{%comment%}
-This is the base html.All others will be inherited from it.
-{%endcomment%}
-<html>
-<head>
-    <title>Search</title>
-</head>
-<body>
+
+{% extends "base.html" %}
+
+{% block title %}
+    WelCome to Your Library Portal
+{% endblock %}
+{% block body %}
+
+
     {% if form.errors %}
         <ul>
             {% for error in errors %}
@@ -20,5 +21,5 @@ This is the base html.All others will be inherited from it.
      </table>   
      <input type="submit" value="Search">
     </form>
-</body>
-</html>
+
+{% endblock %}

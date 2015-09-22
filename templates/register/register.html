@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Please Register for Library Portal
+{% endblock %}
+
+
+{% block body %}
+
+<form action="/register/" method="post" >  {%csrf_token%}
+<h2>Enter your Library Password</h2
+{{ form.as_ul }}
+
+<input type="submit" value="register" >
+
+</form>
+
+{% endblock %}

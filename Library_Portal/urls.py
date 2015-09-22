@@ -16,9 +16,15 @@ Including another URLconf
 #from search import views
 from django.conf.urls import include, url
 from django.contrib import admin
-from search import views 
+from search import views as searchviews
+
 
 urlpatterns = [
+	url(r'^',include('authentication.urls')),
+    url(r'^register',include('library_profile.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^search/',views.searchit),
+    url(r'^search/',searchviews.searchit),
+    url(r'^issue/',searchviews.issuebook),
+    
+    
 ]

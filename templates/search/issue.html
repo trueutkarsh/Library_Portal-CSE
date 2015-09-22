@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+    WelCome to Your Library Portal
+{% endblock %}
+{% block body %}
+	
+	<p>Dear user {{ username }} ,</p>
+    {% if booksissued  %}
+    <p> Of books you selected  books are available <br></p>
+        <table>
+            {% for book in booksissued %}
+                <tr>
+   		 		<td>{{book.title}}</td>
+   			 	<td>{{book.authors.all|first}}</td> {# change here to print all authors#}
+    			<td>{{book.publisher.all|first}}</td>{#change here to print all publishers#}
+   				</tr>
+            {% endfor %}
+      </table> 
+     <p>The following books are already issued.Check on them later<br></p> 
+      <table>
+            {% for book in booksnotissued %}
+                <tr>
+   		 		<td>{{book.title}}</td>
+   			 	<td>{{book.authors.all|first}}</td> {# change here to print all authors#}
+    			<td>{{book.publisher.all|first}}</td>{#change here to print all publishers#}
+   				</tr>
+            {% endfor %}
+      </table>
+    
+    {% else %}
+    <p>Sorry none of the books you selected is avaialable.</p>
+    	
+    {% endif %}
+    
+{% endblock %}

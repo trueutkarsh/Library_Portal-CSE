@@ -38,6 +38,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'admin_interface','search',
+    'authentication',
+    'library_profile'
+    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -56,7 +59,7 @@ ROOT_URLCONF = 'Library_Portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['/home/trueutkarsh/Django Projects/Library_Portal/search/template'],
+        'DIRS': [BASE_DIR+'/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,3 +104,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AUTH_PROFILE_MODULE='library_profile.libprofile'

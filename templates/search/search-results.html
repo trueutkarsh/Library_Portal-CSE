@@ -1,0 +1,50 @@
+
+{% extends "base.html" %}
+
+{% block title %}
+    WelCome to Your Library Portal
+{% endblock %}
+{% block body%}
+<p>You searched for: <strong>{{ query }}</strong></p>
+
+{% if books %}
+    <p>Found {{ books|length }} book{{ books|pluralize }}.</p>
+    <table id="searchresults">
+  <tr>
+    <th>Name</th>
+    <th>Author</th>
+    <th>Publisher</th>
+  </tr>
+  
+    <form action="/issue/" method="post">
+    {% csrf_token %}
+     <table>
+     	{{form.as_table}}
+     </table>
+     
+     <input type="text" class="form-control" name="username" id="username" placeholder="LDAP Username">
+     <input type="password" class="form-control" id="password" name="passwd" placeholder="LDAP Password">
+        
+     <input type="submit" value="Login again and Issue">
+    
+  	</form>
+  	{% comment %}
+    {% for book in books %}
+    <tr>
+    <td>{{book.title}}</td>
+    <td>{{book.authors.all|first}}</td> {# change here to print all authors#}
+    <td>{{book.publisher.all|first}}</td>{#change here to print all publishers#}
+    </tr>
+     {% endfor %}
+    {% endcomment %}
+   
+	
+</table>
+
+
+
+{% else %}
+    <p>No books matched your search criteria.</p>
+{% endif %}
+
+{% endblock %}

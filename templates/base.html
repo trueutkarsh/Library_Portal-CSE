@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+{% load static %} <!-- New line -->
+
+<html>
+
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Bootstrap -->
+        <link href="{% static 'auth/css/bootstrap.css' %}" rel="stylesheet">
+        <!-- Custom CSS -->
+        <link href="{% static 'auth/css/main.css' %}" rel="stylesheet">
+        <link href="netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link href="{% static 'css/chat.css' %}" rel="stylesheet">
+        {% block csslinks %} {% endblock %}
+
+    </head>
+
+    <body>
+         <!-- Fixed navbar -->
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="/">Library Portal</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+              <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="#">Courses</a></li>
+                <li><a href="#">About</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#"> &lt; <strong> {% block user %} Sign In {% endblock %} </strong> &gt;</a></li>
+                  <li><a href="/logout">Logout</a></li>
+               </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+        </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="brodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Incoming Broadcast!!</h4>
+      </div>
+      <div id="brodal-body" class="modal-body">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+         {% block body %}{% endblock %}
+    </body>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static "js/bootstrap.js" %}"></script>
+    <script type="text/javascript">
+        $('#brodal').modal({
+          backdrop: 'static',
+          keyboard: false,
+          show: false
+        });
+    </script>
+    {% block jslinks %} {% endblock %}
+</html>

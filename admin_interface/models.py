@@ -1,4 +1,6 @@
 from django.db import models
+from django.template.defaultfilters import default
+from library_profile.models import libprofile
 
 # Create your models here.
 
@@ -6,7 +8,7 @@ from django.db import models
 class Author(models.Model):#author can be of both books or rearchpaper
 	first_name=models.CharField(max_length=30)#max len can be changed
 	last_name=models.CharField(max_length=40)
-	website=models.URLField(blank=True)#empty values means no website
+	website=models.URLField(null=True,blank=True)#empty values means no website
 	#books=models.ManyToManyField(Book,null=True)
 	#researchpaper=models.ManytoManyField(Research_paper,null=True)
 	
@@ -20,7 +22,7 @@ class Publisher(models.Model):
 	city=models.CharField(max_length=20)
 	state=models.CharField(max_length=20,null=True)
 	country=models.CharField(max_length=40)
-	website=models.URLField(blank=True)
+	website=models.URLField(null=True,blank=True)
 	#books=models.ManyToManyField(Book)
 
 	def __unicode__(self):
@@ -53,18 +55,28 @@ class Research_paper(models.Model):
 
 class Book(models.Model):
 	title=models.CharField(max_length=100)
-	website=models.URLField(blank=True)
+	website=models.URLField(null=True,blank=True)
 	edition=models.IntegerField()	
 	authors=models.ManyToManyField(Author)
 	publisher=models.ManyToManyField(Publisher)
 	courses=models.ManyToManyField(Course,blank=True)
+	issued=models.BooleanField(default=False)
+	issuer=models.ForeignKey(libprofile,blank=True,null=True,default=None)
    #uid=models.CharField(max_length=10)-to be implemented
    #after deciding how to do it.
    #sections=models.ManyToManyField(Book) 
    
    	def __unicode__(self):
-   		return self.title
-
+   		return self.title 
+   	
+   	def issue(self,lib_profile):
+   		if not self.issued:
+   		 	self.issued=True
+   		  	self.issuer=lib_profile.id
+   	  	else:
+   	  		pass
+   	
+   	
 		
 
 
