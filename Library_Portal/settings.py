@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf.global_settings import LOGIN_URL, LOGIN_REDIRECT_URL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,8 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'admin_interface','search',
     'authentication',
-    'library_profile'
-    
+    'library_profile',    
 )
 
 MIDDLEWARE_CLASSES = (
@@ -67,6 +67,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                 "django.core.context_processors.i18n",
+                 "django.core.context_processors.media",
+                 "django.core.context_processors.request",
             ],
         },
     },
@@ -99,10 +102,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+LOGIN_URL='/login/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
 
-AUTH_PROFILE_MODULE='library_profile.libprofile'
+#AUTH_PROFILE_MODULE='library_profile.libprofile'

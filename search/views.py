@@ -5,9 +5,12 @@ from django.shortcuts import render
 from admin_interface.models import Book,Publisher,Author,Course,Research_paper
 from search.forms import searchform,issueform
 from django.db.models import Q
+from django.contrib import  auth
 from django.contrib.auth.models import User,UserManager
 from authentication.authenticator import ldapAuth
 from django.core.context_processors import csrf
+from django.contrib.auth.decorators import login_required
+from django.conf.global_settings import LOGIN_URL
 # Create your views here.
 def searchit(request):
     
@@ -26,7 +29,7 @@ def searchit(request):
                 book_search=form.cleaned_data['book_name']
                 author_search=form.cleaned_data['author_name']
                 pub_search=form.cleaned_data['publisher_name']
-            print(book_search,author_search,pub_search)
+            #print(book_search,author_search,pub_search)
             #in future edit errors here
             #change here
             
@@ -62,7 +65,11 @@ def searchit(request):
                 args={}
                 args['form']=iform
                 args['query']=book_search
+                args['loggedin']=False
                 args.update(csrf(request))
+                if not request.user.is_anonymous():
+                    args['loggedin']=True
+                    args['username']=request.user.username
                 return render(request, 'search/search-results.html',{'form': iform , 'query': book_search,'books':books})
             else:
                 return render(request, 'search/base-search.html',{'errors': errors,'form':form})    
@@ -71,45 +78,71 @@ def searchit(request):
 
     return render(request, 'search/base-search.html',{'errors': errors,'form':form})
 
-#new fuctio   
+#new fuctio  
+@login_required 
 def issuebook(request):
 
     if request.method == 'POST':
+        print("85-her")
+        
+       
+        user=User.objects.all().get(username=request.session['username']) 
+            #redirect them to login page
+        print("89")
+            
+        '''
         Username = request.REQUEST["username"]
         Password = request.REQUEST["passwd"]
-        
+    
         authenticate = ldapAuth(request, Username, Password)
         if authenticate=='VALID':
-            user=User.objects.all().get(username = Username)
-            profile=user.profile 
-            bookstoissue=request.POST.getlist('bookresult')    
-            print(bookstoissue)        
-            if  bookstoissue :
-                booksissued=[]
-                booksnotissued=[]
-                for book in bookstoissue:
-                    booktoissue=Book.objects.all().get(title=book)
-                    print(booktoissue)
-                    if not booktoissue.issued :
-                        
-                        booktoissue.issued=True
-                        booktoissue.issuer=profile
-                        booktoissue.save()
-                        booksissued.append(booktoissue)
-                    else:
-                        booksnotissued.append(booktoissue)
-                    args={}
-                    args['booksissued']=booksissued
-                    args['booksnotissued']=booksnotissued
-                    args['username']=user.username
-                    return render(request,'search/issue.html',args)                        
-            else:
-                return redirect('/search')
+            if not User.objects.filter(username=Username).exists() : 
+                user=User.objects.create_user( Username, Username+"@cse.iitb.ac.in", 'libpassword')
+                user.save()
+                #user=User.objects.all().get(username = Username)
+                  
         else:
-            return redirect('/search')   
+            return render_to_response('search/search-results.html', {'ecomments':'Sorry,Wrong username or password','loggedin':False})
+        
+        user=auth.authenticate(username=Username,password='libpassword')              
+        auth.login(request, user)
+        request.session['user']=user   
+    '''    
+    
+        #    user=request.user                     
+        profile=user.profile   
+        bookstoissue=request.POST.getlist('bookresult')   
+        print("books below") 
+        print(bookstoissue)        
+        if  bookstoissue :
+            booksissued=[]
+            booksnotissued=[]
+            for book in bookstoissue:
+                booktoissue=Book.objects.all().get(title=book)
+                print(booktoissue)
+                if not booktoissue.issued :
+                    
+                    booktoissue.issued=True
+                    booktoissue.issuer=profile
+                    booktoissue.save()
+                    booksissued.append(booktoissue)
+                else:
+                    booksnotissued.append(booktoissue)
+            args={}
+            args['booksissued']=booksissued
+            args['booksnotissued']=booksnotissued
+            args['username']=user.username
+            args['loggedin']=True
+            print(args)
+            return render(request,'search/issue.html',args)                        
+        else:
+            print("no books to issue")
+            return redirect('/')
+   
     else:
         #ask dheeru why this one
-        return redirect('/search')
+        print("118")
+        return redirect('/')
         
     
     

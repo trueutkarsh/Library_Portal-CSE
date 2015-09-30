@@ -17,14 +17,18 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from search import views as searchviews
+from authentication.views import logout,authentication
 
 
 urlpatterns = [
-	url(r'^',include('authentication.urls')),
+	#url(r'^',include('authentication.urls')),
+    
     url(r'^register',include('library_profile.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^search/',searchviews.searchit),
+    url(r'^$',searchviews.searchit,name='index'),
     url(r'^issue/',searchviews.issuebook),
-    
+    url(r'^login/$',authentication,name='login'),
+    url(r'^logout/$',logout),
+
     
 ]

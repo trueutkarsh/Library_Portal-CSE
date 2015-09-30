@@ -14,7 +14,7 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <form action="/search/" method="post">
+    <form action="/" method="post">
     {%csrf_token%}
      <table>
      	{{form.as_table}}

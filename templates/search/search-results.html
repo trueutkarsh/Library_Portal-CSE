@@ -22,12 +22,17 @@
      	{{form.as_table}}
      </table>
      
-     <input type="text" class="form-control" name="username" id="username" placeholder="LDAP Username">
-     <input type="password" class="form-control" id="password" name="passwd" placeholder="LDAP Password">
-        
-     <input type="submit" value="Login again and Issue">
+
+    <input type="submit" value=" Issue">
     
+ 
   	</form>
+  	     {% block extra%}
+         <p>{{ ecomment }}</p>
+         {% endblock %}
+  	
+  	
+  	
   	{% comment %}
     {% for book in books %}
     <tr>
