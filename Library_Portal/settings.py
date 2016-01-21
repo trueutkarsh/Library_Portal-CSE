@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+
+
+import django
+DJANGO_PATH=os.path.dirname(django.__file__)
 from django.conf.global_settings import LOGIN_URL, LOGIN_REDIRECT_URL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.redirects',
     'admin_interface','search',
     'authentication',
     'library_profile',    
@@ -59,7 +65,7 @@ ROOT_URLCONF = 'Library_Portal.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR+'/templates'],
+        'DIRS': [BASE_DIR+'/templates',DJANGO_PATH],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

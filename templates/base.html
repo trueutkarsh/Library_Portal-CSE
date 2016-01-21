@@ -42,8 +42,8 @@
 
 
 {% block user %}
-{% if  request.session.username  %}
-<p>Dear	{{ request.session.username }}<br> </p>
+{% if  request.user.username  %}
+<p>Dear	{{ request.user.username }}<br> </p>
 {%else%}
 <p>Dear AnonyMous User</p>
 {%endif%}

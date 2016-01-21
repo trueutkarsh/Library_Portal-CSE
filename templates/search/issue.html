@@ -6,7 +6,7 @@
 {% endblock %}
 {% block body %}
 	
-	<p>Dear user {{ username }} ,</p>
+	
     {% if booksissued  %}
     <p> Of books you selected these books have been issued on your name <br></p>
         <table>
@@ -34,22 +34,5 @@
     <p>Sorry none of the books you selected is avaialable.</p>
     	
     {% endif %}
-    
-    
-	{%comment%}      
-             < div class="row">
-            <div class="col-md-6">
-                <div class="form-group"><input type="text" class="form-control" name="username" id="username" placeholder="LDAP Username"></div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <input type="password" class="form-control" id="password" name="passwd" placeholder="LDAP Password">
-                </div>
-            </div>
-			</div>
-     {%endcomment%} 
-      
-    
 
-    
 {% endblock %}

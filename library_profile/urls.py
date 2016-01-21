@@ -10,6 +10,6 @@ urlpatterns = patterns('',
     # url(r'^$', 'netyap.views.sample-app', name='sample-app'),
     # url(r'^blog/', include('blog.urls')),
 
-    url(r'^', registerlibuser, name='resgiter'),
+    url(r'^', registerlibuser, name='register'),
 
 )

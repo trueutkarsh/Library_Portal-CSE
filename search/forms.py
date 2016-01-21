@@ -14,5 +14,5 @@ class issueform(forms.Form):
 	#bookresult=forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple,label="Select books which you want to issue.")
 	def __init__(self,books,*args, **kwargs):
 		super(issueform, self).__init__(*args, **kwargs)
-		self.fields['bookresult']=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=[(x.title,x) for x in books])
+		self.fields['bookresult']=forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,choices=[(x.id,x) for x in books])
 			
