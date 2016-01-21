@@ -13,22 +13,14 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
-#from search import views
 from django.conf.urls import include, url
 from django.contrib import admin
-from search import views as searchviews
-from authentication.views import logout,authentication
-
-
+from django.contrib.sites.models import Site
+admin.autodiscover()
 urlpatterns = [
-	#url(r'^',include('authentication.urls')),
-    
-    url(r'^register',include('library_profile.urls')),
+    url(r'^register', include('library_profile.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$',searchviews.searchit,name='index'),
-    url(r'^issue/',searchviews.issuebook),
-    url(r'^login/$',authentication,name='login'),
-    url(r'^logout/$',logout),
-
-    
+    url(r'^admin/log/', include('admin_interface.urls')),
+    url(r'^search/', include('search.urls')),
+    url(r'^', include('authentication.urls'))
 ]

@@ -6,7 +6,6 @@ from django.contrib import  auth
 from authentication.authenticator import ldapAuth
 from forms import LibUserForm
 from library_profile.forms import LibUserForm
-from django.contrib.redirects.models import Redirect
 from django.core.context_processors import csrf
 
 # Create your views here.

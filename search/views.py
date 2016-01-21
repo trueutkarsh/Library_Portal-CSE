@@ -2,7 +2,7 @@
 from django.shortcuts import render, render_to_response,redirect
 from django.http import  HttpResponse
 from django.shortcuts import render
-from admin_interface.models import Book,Publisher,Author,Course,Research_paper
+from admin_interface.models import *
 from search.forms import searchform,issueform
 from django.db.models import Q
 from django.contrib import  auth
@@ -12,6 +12,8 @@ from django.core.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 from django.conf.global_settings import LOGIN_URL
 # Create your views here.
+
+@login_required
 def searchit(request):
     
     errors=[]
@@ -70,7 +72,7 @@ def searchit(request):
                 if not request.user.is_anonymous():
                     args['loggedin']=True
                     args['username']=request.user.username
-                return render(request, 'search/search-results.html',{'form': iform , 'query': book_search,'books':books})
+                return render(request, 'search/search-results.html',{'iform': iform , 'query': book_search,'books':books,'form':form})
             else:
                 return render(request, 'search/base-search.html',{'errors': errors,'form':form})    
     else:
@@ -78,38 +80,14 @@ def searchit(request):
 
     return render(request, 'search/base-search.html',{'errors': errors,'form':form})
 
-#new fuctio  
-@login_required 
+
+@login_required
 def issuebook(request):
 
     if request.method == 'POST':
-        print("85-her")
-        
-       
+
         user=User.objects.all().get(username=request.session['username']) 
-            #redirect them to login page
-        print("89")
-            
-        '''
-        Username = request.REQUEST["username"]
-        Password = request.REQUEST["passwd"]
-    
-        authenticate = ldapAuth(request, Username, Password)
-        if authenticate=='VALID':
-            if not User.objects.filter(username=Username).exists() : 
-                user=User.objects.create_user( Username, Username+"@cse.iitb.ac.in", 'libpassword')
-                user.save()
-                #user=User.objects.all().get(username = Username)
-                  
-        else:
-            return render_to_response('search/search-results.html', {'ecomments':'Sorry,Wrong username or password','loggedin':False})
-        
-        user=auth.authenticate(username=Username,password='libpassword')              
-        auth.login(request, user)
-        request.session['user']=user   
-    '''    
-    
-        #    user=request.user                     
+                    
         profile=user.profile   
         bookstoissue=request.POST.getlist('bookresult')   
         print("books below") 
@@ -118,26 +96,24 @@ def issuebook(request):
             booksissued=[]
             booksnotissued=[]
             for book in bookstoissue:
-                booktoissue=Book.objects.all().get(title=book)
+                booktoissue=Book.objects.all().get(pk=book)
                 print(booktoissue)
-                if not booktoissue.issued :
-                    
-                    booktoissue.issued=True
-                    booktoissue.issuer=profile
+                if booktoissue.issue(profile)  :
+                    #write code here for book requested
                     booktoissue.save()
-                    booksissued.append(booktoissue)
+                    if RequestLog.addtolog(booktoissue,profile):
+                        booksissued.append(booktoissue)
                 else:
                     booksnotissued.append(booktoissue)
             args={}
             args['booksissued']=booksissued
             args['booksnotissued']=booksnotissued
             args['username']=user.username
-            args['loggedin']=True
             print(args)
             return render(request,'search/issue.html',args)                        
         else:
             print("no books to issue")
-            return redirect('/')
+            return redirect('/search/')
    
     else:
         #ask dheeru why this one

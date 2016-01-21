@@ -1,0 +1,29 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{{ title }} | {{ 'Library Portal' }}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">{{ 'Library Portal Admin' }}</a></h1>
+
+{% endblock %}
+
+{% block nav-global %}
+<style type="text/css">
+  .live{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+
+</style>
+
+<div  >
+  <ul id="live" class="spritesnav" > 
+    <li id="Issuelog" ><a href="#">Issued log</a></li> 
+    <li id="ReturnLog" class="active"><a href="#">Return Log</a></li> 
+    <li id="RequestLog"><a href="#">Request Log</a></li> 
+  </ul>
+  </div> 
+{% endblock %}
+
