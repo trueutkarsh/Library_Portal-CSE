@@ -101,7 +101,7 @@ class RequestLog(models.Model):
 
 		if ibook!=None and userprofile != None :
 			if ibook.state==2 and not RequestLog.objects.filter(book=ibook.id).exists():
-				ilog=RequestLog(book=ibook,user=userprofile)
+				ilog=RequestLog(book=ibook,user=userprofile,date=datetime.datetime.now())
 				ilog.save()
 				return True;
 
@@ -134,7 +134,7 @@ class IssuedLog(models.Model): # this will have log of all the books
 		ibook=Book.objects.get(pk=rlog.book)
 		if ibook!=None :
 			if ibook.state==3 and not IssuedLog.objects.filter(book=bookid).exists():
-				ilog=IssuedLog(book=rlog.book,user=rlog.user)
+				ilog=IssuedLog(book=rlog.book,user=rlog.user,date=datetime.datetime.now())
 				ilog.save()				
 				RequestLog.remove(rlog)
 				return True
