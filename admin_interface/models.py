@@ -133,20 +133,26 @@ class IssuedLog(models.Model): # this will have log of all the books
 	def addtolog(rlog):
 		ibook=Book.objects.get(pk=rlog.book)
 		if ibook!=None :
-			if ibook.state==3 and not IssuedLog.objects.filter(book=bookid).exists():
+			if ibook.state==2 and not IssuedLog.objects.filter(book=bookid).exists():
+				ibook.state=3
+				ibook.save()
 				ilog=IssuedLog(book=rlog.book,user=rlog.user,date=datetime.datetime.now())
 				ilog.save()				
 				RequestLog.remove(rlog)
 				return True
-		return False;
-				
-	def returnit(self):							
-		ibook=Book.objects.get(pk=self.book)
-		if ibook!=None :
-			if ibook.state==3:
-				ibook.state=1
-				ibook.save()
-				RequestLog.remove(self)				
+		return False
+	@staticmethod				
+	def returnit(ilog):
+		if ilog!=None:							
+			ibook=Book.objects.get(pk=ilog.book)
+			if ibook!=None :
+				if ibook.state==3:
+					ibook.state=1
+					ibook.issuer=None
+					ibook.save()
+					IssuedLog.remove(ilog)
+					return True
+		return False						
 
 
 

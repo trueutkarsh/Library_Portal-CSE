@@ -65,14 +65,16 @@ def searchit(request):
                 #iform.fields['bookresult'].choices=[(x.title) for x in books]
                 #print(iform)
                 args={}
-                args['form']=iform
+                args['iform']=iform
                 args['query']=book_search
                 args['loggedin']=False
+                args['books']=books
                 args.update(csrf(request))
                 if not request.user.is_anonymous():
                     args['loggedin']=True
                     args['username']=request.user.username
-                return render(request, 'search/search-results.html',{'iform': iform , 'query': book_search,'books':books,'form':form})
+                #return render(request, 'search/search-results.html',{'iform': iform , 'query': book_search,'books':books,'form':form})
+                return render(request, 'search/search-results.html',args)
             else:
                 return render(request, 'search/base-search.html',{'errors': errors,'form':form})    
     else:
