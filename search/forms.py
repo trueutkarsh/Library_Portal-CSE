@@ -1,8 +1,6 @@
 #define all forms here
 from django import forms
 
-def returnchoices(books):
-	pass
 
 
 class searchform(forms.Form):

@@ -9,21 +9,38 @@
 
 {% block nav-global %}
 <style type="text/css">
-  .live{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
+
+  ul live {
+      list-style-type: block;
+      margin: 0;
+      padding: 0;
+      overflow: auto;
   }
+
+  li {
+    float: left;
+  }
+
+  li a {
+    display: auto;
+    padding: 8px;
+}
+
 
 </style>
 
 <div  >
   <ul id="live" class="spritesnav" > 
-    <li id="Issuelog" ><a href="#">Issued log</a></li> 
-    <li id="ReturnLog" class="active"><a href="#">Return Log</a></li> 
-    <li id="RequestLog"><a href="#">Request Log</a></li> 
+    <li id="Issuelog"  class="active"><a href="/admin/rtoi/">Request log</a></li> 
+    <li id="ReturnLog" class="active"><a href="/admin/itor/">Return Log</a></li> 
   </ul>
   </div> 
 {% endblock %}
 
+
+{% block content %}
+{{block.super}}
+
+
+
+{%endblock%}

@@ -1,0 +1,44 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+{{block.super}}
+
+<form action="/admin/itor/confirm/" method="post">
+{% csrf_token %}
+<table id="issuelogs">
+  <tr>
+    <th>Id</th>
+    <th>Book-Name</th>
+    <th>Issuers</th>
+    <th>Request-date</th>
+  </tr>
+
+     {% for x in requests %}
+         <tr>
+            <td>
+             <p><input type="checkbox" name="issuelog[]" value="{{x.id}}" />  {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{x.user.name}}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+
+    <input type="submit" value="Return">
+  	</form>
+
+  	     {% block extra%}
+         <p>{{ ecomment }}</p>
+         {% endblock %}
+
+</table>
+
+
+
+{% endblock %}

@@ -1,0 +1,54 @@
+
+{% extends "admin/base_site.html" %}
+
+{%block style%}
+{{block.super}}
+<style type="text/css">
+  .submit{
+    position: relative;
+    bottom: 0;
+  }
+  </style>
+{%endblock%}
+{%block script%}
+{{block.super}}
+<script>
+
+function goBack() {
+    window.history.back();
+}
+</script>
+{%endblock%}
+{% block content %}
+	
+
+    {% if booksreturned  %}
+    <p> Of requests you selected these books have been issued.Keep th book back in library. <br></p>
+      {% csrf_token %}
+      <table id="confirmedlogs" class="tables">
+        <tr>
+
+          <th>Book-Name</th>
+          <th>Issuers</th>
+          <th>Request-date</th>
+        </tr>
+     {% for x in booksreturned %}
+         <tr>
+
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{ x.user }}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+      </table>
+   {% else %} 
+    <p>Sorry none of the requests could be completed.</p>
+  {% endif %}
+
+{% endblock %}

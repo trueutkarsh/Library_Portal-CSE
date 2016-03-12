@@ -13,7 +13,7 @@ class Author(models.Model):#author can be of both books or rearchpaper
 	website=models.URLField(null=True,blank=True)#empty values means no website
 	#books=models.ManyToManyField(Book,null=True)
 	#researchpaper=models.ManytoManyField(Research_paper,null=True)
-	
+
 
 	def __unicode__(self):
 		return (self.first_name +" "+ self.last_name)
@@ -58,7 +58,7 @@ class Research_paper(models.Model):
 class Book(models.Model):
 	title=models.CharField(max_length=100)
 	website=models.URLField(null=True,blank=True)
-	edition=models.IntegerField(blank=True,null=True)	
+	edition=models.IntegerField(blank=True,null=True)
 	authors=models.ManyToManyField(Author,blank=True,null=True)
 	publisher=models.ManyToManyField(Publisher,blank=True,null=True)
 	courses=models.ManyToManyField(Course,blank=True)
@@ -66,13 +66,13 @@ class Book(models.Model):
 	issuer=models.ForeignKey(libprofile,blank=True,null=True,default=None)
    #uid=models.CharField(max_length=10)-to be implemented
    #after deciding how to do it.
-   #sections=models.ManyToManyField(Book) 
-   
+   #sections=models.ManyToManyField(Book)
+
    	def __unicode__(self):
-   		return self.title 
-   	
+   		return self.title
+
    	def issue(self,lib_profile):
-   		if lib_profile !=None:			
+   		if lib_profile !=None:
 	   		if self.state==1:
 	   		 	self.state=2
 	   		  	self.issuer=lib_profile
@@ -80,73 +80,81 @@ class Book(models.Model):
 	   	  	else:
 	   	  		pass
 	   	return False
-	   	  		
+
    	def returnbook(self):
    		self.state=1
    		self.issuer=None
-   		
-   		
+
+
 class RequestLog(models.Model):
 	book=models.ForeignKey(Book)
 	user=models.ForeignKey(libprofile)
-	date=models.DateTimeField(auto_now=True)		
+	date=models.DateTimeField(auto_now=True)
 
 
-		
+
 
 	def __unicode__(self):
-		return self.book.title 
-	@staticmethod	
-	def addtolog(ibook,userprofile):
+		return str(self.book.title)+"-"+str(self.user)+ "-" +str(self.date.date()) 
+	@staticmethod
+	def addtolog(ibook,userprofile,check=True):
 
 		if ibook!=None and userprofile != None :
 			if ibook.state==2 and not RequestLog.objects.filter(book=ibook.id).exists():
-				ilog=RequestLog(book=ibook,user=userprofile)
-				ilog.save()
+				if not check:
+					ilog=RequestLog(book=ibook,user=userprofile,date=datetime.datetime.now())
+					ilog.save()
 				return True;
 
-		return False		
-	def returnit(self):							
-		ibook=Book.objects.get(pk=self.book)
+		return False
+	@staticmethod	
+	def returnit(rlog,check=True):
+		ibook=Book.objects.get(pk=rlog.book.pk)
 		if ibook!=None :
 			if ibook.state==2:
-				ibook.state=1
-				ibook.save()
-				RequestLog.remove(self)
+				if not check:
+					ibook.state=1
+					ibook.issuer=None;
+					ibook.save()
+					rlog.delete()
 				return True;
-		return False		
+		return False
 
 
 class IssuedLog(models.Model): # this will have log of all the books
 	book=models.ForeignKey(Book)
 	user=models.ForeignKey(libprofile)
-	date=models.DateTimeField(auto_now=True)	
+	date=models.DateTimeField(auto_now=True)
 
 
 
 	def __unicode__(self):
-		return self.book.title 
+		return self.book.title
 
-	def __init__():
-		pass
-	@staticmethod	
-	def addtolog(rlog):
-		ibook=Book.objects.get(pk=rlog.book)
+	@staticmethod
+	def addtolog(rlog,check=True):
+		ibook=Book.objects.get(pk=rlog.book.pk)
 		if ibook!=None :
-			if ibook.state==3 and not IssuedLog.objects.filter(book=bookid).exists():
-				ilog=IssuedLog(book=rlog.book,user=rlog.user)
-				ilog.save()				
-				RequestLog.remove(rlog)
+			if ibook.state==2 and not IssuedLog.objects.filter(book=ibook).exists():
+				if not check:
+					ilog=IssuedLog(book=rlog.book,user=rlog.user,date=datetime.datetime.now())
+					ilog.save()
+					ibook.state=3
+					ibook.save()
+					rlog.delete()
+					
 				return True
-		return False;
-				
-	def returnit(self):							
-		ibook=Book.objects.get(pk=self.book)
-		if ibook!=None :
-			if ibook.state==3:
-				ibook.state=1
-				ibook.save()
-				RequestLog.remove(self)				
-
-
-
+		return False
+	@staticmethod
+	def returnit(ilog,check=True):
+		if ilog!=None:
+			ibook=Book.objects.get(pk=ilog.book.pk)
+			if ibook!=None :
+				if ibook.state==3:
+					if not check:
+						ibook.state=1
+						ibook.issuer=None
+						ibook.save()
+						ilog.delete()
+					return True
+		return False
