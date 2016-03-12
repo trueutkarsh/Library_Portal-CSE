@@ -17,8 +17,8 @@
 function goBack() {
     window.history.back();
 }
-
 </script>
+{%endblock%}
 {% block content %}
 	
 
@@ -35,7 +35,7 @@ function goBack() {
      {% for x in booksissued %}
          <tr>
             <td>
-             <p> <input type="hidden" name="confirmed[]" value=x.pk /> {{x.pk}}</p>
+             <p> <input type="hidden" name="confirmed[]" value= "{{x.pk}}" /> {{x.pk}}</p>
             </td>
             <td>
                 {{x.book.title}}

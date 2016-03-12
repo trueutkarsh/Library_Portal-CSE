@@ -107,14 +107,16 @@ class RequestLog(models.Model):
 				return True;
 
 		return False
-	def returnit(self,check=True):
-		ibook=Book.objects.get(pk=self.book)
+	@staticmethod	
+	def returnit(rlog,check=True):
+		ibook=Book.objects.get(pk=rlog.book.pk)
 		if ibook!=None :
 			if ibook.state==2:
 				if not check:
 					ibook.state=1
+					ibook.issuer=None;
 					ibook.save()
-					RequestLog.remove(self)
+					rlog.delete()
 				return True;
 		return False
 
@@ -129,31 +131,30 @@ class IssuedLog(models.Model): # this will have log of all the books
 	def __unicode__(self):
 		return self.book.title
 
-	def __init__():
-		pass
 	@staticmethod
 	def addtolog(rlog,check=True):
-		ibook=Book.objects.get(pk=rlog.book)
+		ibook=Book.objects.get(pk=rlog.book.pk)
 		if ibook!=None :
-			if ibook.state==2 and not IssuedLog.objects.filter(book=bookid).exists():
+			if ibook.state==2 and not IssuedLog.objects.filter(book=ibook).exists():
 				if not check:
-					ibook.state=3
-					ibook.save()
 					ilog=IssuedLog(book=rlog.book,user=rlog.user,date=datetime.datetime.now())
 					ilog.save()
-					RequestLog.remove(rlog)
+					ibook.state=3
+					ibook.save()
+					rlog.delete()
+					
 				return True
 		return False
 	@staticmethod
 	def returnit(ilog,check=True):
 		if ilog!=None:
-			ibook=Book.objects.get(pk=ilog.book)
+			ibook=Book.objects.get(pk=ilog.book.pk)
 			if ibook!=None :
 				if ibook.state==3:
 					if not check:
 						ibook.state=1
 						ibook.issuer=None
 						ibook.save()
-						IssuedLog.remove(ilog)
+						ilog.delete()
 					return True
 		return False

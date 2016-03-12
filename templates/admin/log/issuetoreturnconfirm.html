@@ -1,0 +1,101 @@
+{% extends "admin/base_site.html" %}
+
+{%block style%}
+{{block.super}}
+<style type="text/css">
+  .submit{
+    position: relative;
+    bottom: 0;
+  }
+  </style>
+{%endblock%}
+{%block script%}
+{{block.super}}
+<script>
+
+function gohome() {
+    window.location="/admin/itor/";
+}
+
+</script>
+{%endblock%}
+
+{% block content %}
+
+    <form action="/admin/itor/done/" method="post">
+      {% csrf_token %}
+      {%if booksreturned %}
+        <table id="confirmedlogs" class="tables">
+          <tr>
+            <th>Id</th>
+            <th>Book-Name</th>
+            <th>Issuers</th>
+            <th>Request-date</th>
+          </tr>
+         {% for x in booksreturned %}
+             <tr>
+                <td>
+                 <p> <input type="hidden" name="booksconfirmed[]" value="{{x.pk}}" /> {{x.pk}}</p>
+                </td>
+                <td>
+                    {{x.book.title}}
+                </td>
+                <td>
+                    {{ x.user }}
+                </td>
+                <td>
+                    {{x.date}}
+                </td>
+            </tr>
+          {% endfor %}
+        </table>
+        <input class="Submit"  type="submit" value="Accept">
+      {%endif%}
+
+      {% if booksnotreturned %}
+      <h2>
+        Following books have issue. Look into the matter.
+      </h2>
+        <table id="errorlogs" class="tables">
+        <tr>
+          <th>Id</th>
+          <th>Book-Name</th>
+          <th>Issuers</th>
+          <th>Request-date</th>
+        </tr>
+     {% for x in booksnotissued %}
+         <tr>
+            <td>
+             <p> <input type="hidden" name="booksnotconfirmed[]" value="{{x.pk}}" /> {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{ x.user }}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+      </table>
+      {%endif%}
+
+
+    
+    </form> 
+
+    <button class="Submit" onclick="gohome()">Go Home</button>
+
+    {% block extra%}
+         <p>{{ ecomment }}</p>
+
+{% endblock %}
+  	
+
+
+
+
+{% endblock %}
+

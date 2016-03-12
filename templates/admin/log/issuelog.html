@@ -3,7 +3,7 @@
 {% block content %}
 {{block.super}}
 
-<form action="/admin/rtoi/confirm/" method="post">
+<form action="/admin/itor/confirm/" method="post">
 {% csrf_token %}
 <table id="issuelogs">
   <tr>
@@ -13,12 +13,10 @@
     <th>Request-date</th>
   </tr>
 
-    <p>{{requests}}</p>
-
      {% for x in requests %}
          <tr>
             <td>
-             <input type="checkbox" name="requestlog[]" value=x.id /> <p> {{x.pk}}</p>
+             <p><input type="checkbox" name="issuelog[]" value="{{x.id}}" />  {{x.pk}}</p>
             </td>
             <td>
                 {{x.book.title}}
@@ -32,7 +30,7 @@
         </tr>
       {% endfor %}
 
-    <input type="submit" value=" Issue">
+    <input type="submit" value="Return">
   	</form>
 
   	     {% block extra%}

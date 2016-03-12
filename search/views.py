@@ -102,7 +102,7 @@ def issuebook(request):
                 if booktoissue.issue(profile)  :
                     #write code here for book requested
                     booktoissue.save()
-                    if RequestLog.addtolog(booktoissue,profile):
+                    if RequestLog.addtolog(booktoissue,profile,False):
                         booksissued.append(booktoissue)
                 else:
                     booksnotissued.append(booktoissue)

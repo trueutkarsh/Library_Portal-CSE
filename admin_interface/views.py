@@ -11,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 
 
 def reqtoissue(request):
-
         if request.method=="GET":
             reqlogs=RequestLog.objects.all()
             args={}
@@ -25,8 +24,9 @@ def reqtoissue(request):
             return redirect('/admin/')
 
 def reqtoissueconfirm(request):
+    print("hell")
     if request.method=="POST":
-        requestlogs=request.POST.getlist('requestlog')
+        requestlogs=request.POST.getlist('requestlog[]')
         booksissued=[]
         booksnotissued=[]
         print("books below",requestlogs)
@@ -35,16 +35,16 @@ def reqtoissueconfirm(request):
             for req in requestlogs:
                 log=RequestLog.objects.all().get(pk=req)
                 if IssuedLog.addtolog(log) :
-                    booksissued.add(log)
+                    booksissued.append(log)
                 else:
-                    booksnotissued.add(log)
+                    booksnotissued.append(log)
 
             args={}
             args.update(csrf(request))
             args['booksissued']=booksissued
             args['booksnotissued']=booksnotissued
             args['title']="Confirm Issue"
-
+            print(args)
             return render(request,'admin/log/reqtoissueconfirm.html',args)
         else:
             print("no books to issue")
@@ -58,19 +58,25 @@ def reqtoissueconfirm(request):
 def reqtoissuedone(request):
 
     if request.method=="POST":
-        booksconfirmed=request.POST.getlist('booksconfirmed')
+        booksconfirmed=request.POST.getlist('booksconfirmed[]')
+        print(booksconfirmed)
         booksissued=[]
         booksnotissued=[]
         if booksconfirmed :
             for req in booksconfirmed:
                 log=RequestLog.objects.all().get(pk=req)
-                IssuedLog.addtolog(log,False) #save it
-                booksissued.add(log)
+
+                if IssuedLog.addtolog(log,False) : #save it
+                    booksissued.append(log)
+                else:
+                    print("Some error occured")
+                    booksnotissued.append(log)   
 
 
         args={}
         args.update(csrf(request))
         args['booksissued']=booksissued
+        args['booksnotissued']=booksnotissued
         args['title']="Issued"
 
         return render(request,'admin/log/reqtoissuedone.html',args)
@@ -82,13 +88,13 @@ def reqtoissuedone(request):
 
 def issuetoreturn(request):
 
-    if request.method=='POST':
-        issuelogs=issuetoreturnform(IssuedLog.objects.all())
+    if request.method=='GET':
+        issuelogs=IssuedLog.objects.all()
         args={}
-        args['form']=issuelogs
+        args['requests']=issuelogs
         args['title']="Books to be returned"
-
         args.update(csrf(request))
+        print(args)
         return render(request, 'admin/log/issuelog.html',args)
     else:
         return redirect('/admin/')
@@ -96,16 +102,16 @@ def issuetoreturn(request):
 def issuetoreturnconfirm(request):
 
     if request.method=='POST':
-        issuelogs=request.POST.getlist('issuelog')
+        issuelogs=request.POST.getlist('issuelog[]')
         booksreturned=[]
         booksnotreturned=[]
-        if  requestlog :
+        if  issuelogs :
             for req in issuelogs:
                 log=IssuedLog.objects.all().get(pk=req)
                 if IssuedLog.returnit(log) :
-                    booksreturned.add(log)
+                    booksreturned.append(log)
                 else:
-                    booksnotreturned.add(log)
+                    booksnotreturned.append(log)
 
             args={}
             args.update(csrf(request))
@@ -122,12 +128,25 @@ def issuetoreturnconfirm(request):
 
 def issuetoreturndone(request):
     if request.method=="POST":
-        booksreturned=request.POST.getlist('booksissued')
+        booksconfirmed=request.POST.getlist('booksconfirmed[]')
+        booksreturned=[]
+        booksnotreturned=[]
+
+        if booksconfirmed :
+            for req in booksconfirmed:
+                log=IssuedLog.objects.all().get(pk=req)
+                if IssuedLog.returnit(log,False) : #remove it
+                    booksreturned.append(log)
+                else:
+                    print("Some error occured")
+                    booksnotreturned.append(log)   
+
         args={}
         args.update(csrf(request))
         args['title']="Return Done"
-
-        args['booksissued']=booksissued
+        args['booksreturned']=booksreturned
+        args['booksnotreturned']=booksnotreturned
+        print('admin/log/issuetoreturndone.html',args)
         return render(request,'admin/log/issuetoreturndone.html',args)
     else :
         return redirect('/admin/')

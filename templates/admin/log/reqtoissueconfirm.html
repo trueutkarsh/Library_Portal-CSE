@@ -16,8 +16,8 @@
 {{block.super}}
 <script>
 
-function goBack() {
-    window.location="";
+function gohome() {
+    window.location="/admin/rtoi/";
 }
 
 </script>
@@ -27,35 +27,38 @@ function goBack() {
 
     <form action="/admin/rtoi/done/" method="post">
       {% csrf_token %}
-      <table id="confirmedlogs" class="tables">
-        <tr>
-          <th>Id</th>
-          <th>Book-Name</th>
-          <th>Issuers</th>
-          <th>Request-date</th>
-        </tr>
-     {% for x in booksconfirmed %}
-         <tr>
-            <td>
-             <p> <input type="hidden" name="booksconfirmed[]" value=x.pk /> {{x.pk}}</p>
-            </td>
-            <td>
-                {{x.book.title}}
-            </td>
-            <td>
-                {{ x.user }}
-            </td>
-            <td>
-                {{x.date}}
-            </td>
-        </tr>
-      {% endfor %}
-      </table>
-      <h2>
-        Fllowing request have issue. Look into the matter.
+      {%if booksissued %}
+        <table id="confirmedlogs" class="tables">
+          <tr>
+            <th>Id</th>
+            <th>Book-Name</th>
+            <th>Issuers</th>
+            <th>Request-date</th>
+          </tr>
+         {% for x in booksissued %}
+             <tr>
+                <td>
+                 <p> <input type="hidden" name="booksconfirmed[]" value="{{x.pk}}" /> {{x.pk}}</p>
+                </td>
+                <td>
+                    {{x.book.title}}
+                </td>
+                <td>
+                    {{ x.user }}
+                </td>
+                <td>
+                    {{x.date}}
+                </td>
+            </tr>
+          {% endfor %}
+        </table>
+        <input class="Submit"  type="submit" value="Issue">
+      {%endif%}
 
-      </h2>
       {% if booksnotissued %}
+      <h2>
+        Following request have issue. Look into the matter.
+      </h2>
         <table id="errorlogs" class="tables">
         <tr>
           <th>Id</th>
@@ -63,10 +66,10 @@ function goBack() {
           <th>Issuers</th>
           <th>Request-date</th>
         </tr>
-     {% for x in booksnotconfirmed %}
+     {% for x in booksnotissued %}
          <tr>
             <td>
-             <p> <input type="hidden" name="notconfirmed[]" value=x.pk /> {{x.pk}}</p>
+             <p> <input type="hidden" name="booksnotconfirmed[]" value="{{x.pk}}" /> {{x.pk}}</p>
             </td>
             <td>
                 {{x.book.title}}
@@ -80,19 +83,16 @@ function goBack() {
         </tr>
       {% endfor %}
       </table>
+      {%endif%}
 
-      {%end if%}
 
-
-    <input class="submit"  type="submit" value=" Issue" style="position: relative; bottom:0; ">
+    
     </form> 
 
-    <button onclick="gohome()">Go Home</button>
+    <button class="Submit" onclick="gohome()">Go Home</button>
 
     {% block extra%}
          <p>{{ ecomment }}</p>
-}
-}
 
 {% endblock %}
   	
