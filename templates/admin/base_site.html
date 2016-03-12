@@ -20,10 +20,17 @@
 
 <div  >
   <ul id="live" class="spritesnav" > 
-    <li id="Issuelog" ><a href="#">Issued log</a></li> 
-    <li id="ReturnLog" class="active"><a href="#">Return Log</a></li> 
-    <li id="RequestLog"><a href="#">Request Log</a></li> 
+    <li id="Issuelog" ><a href="/admin/rtoi/">Issued log</a></li> 
+    <li id="ReturnLog" class="active"><a href="/admin/itor/">Return Log</a></li> 
+    <li id="RequestLog"><a href="/admin/rtoi/">Request Log</a></li> 
   </ul>
   </div> 
 {% endblock %}
 
+
+{% block content %}
+{{block.super}}
+
+
+
+{%endblock%}

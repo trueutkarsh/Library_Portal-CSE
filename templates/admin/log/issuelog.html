@@ -1,0 +1,46 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+{{block.super}}
+
+<form action="/admin/rtoi/confirm/" method="post">
+{% csrf_token %}
+<table id="issuelogs">
+  <tr>
+    <th>Id</th>
+    <th>Book-Name</th>
+    <th>Issuers</th>
+    <th>Request-date</th>
+  </tr>
+
+    <p>{{requests}}</p>
+
+     {% for x in requests %}
+         <tr>
+            <td>
+             <input type="checkbox" name="requestlog[]" value=x.id /> <p> {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{x.user.name}}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+
+    <input type="submit" value=" Issue">
+  	</form>
+
+  	     {% block extra%}
+         <p>{{ ecomment }}</p>
+         {% endblock %}
+
+</table>
+
+
+
+{% endblock %}

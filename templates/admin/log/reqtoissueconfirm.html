@@ -1,0 +1,104 @@
+{% extends "admin/base_site.html" %}
+
+
+
+
+{%block style%}
+{{block.super}}
+<style type="text/css">
+  .submit{
+    position: relative;
+    bottom: 0;
+  }
+  </style>
+{%endblock%}
+{%block script%}
+{{block.super}}
+<script>
+
+function goBack() {
+    window.location="";
+}
+
+</script>
+{%endblock%}
+
+{% block content %}
+
+    <form action="/admin/rtoi/done/" method="post">
+      {% csrf_token %}
+      <table id="confirmedlogs" class="tables">
+        <tr>
+          <th>Id</th>
+          <th>Book-Name</th>
+          <th>Issuers</th>
+          <th>Request-date</th>
+        </tr>
+     {% for x in booksconfirmed %}
+         <tr>
+            <td>
+             <p> <input type="hidden" name="booksconfirmed[]" value=x.pk /> {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{ x.user }}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+      </table>
+      <h2>
+        Fllowing request have issue. Look into the matter.
+
+      </h2>
+      {% if booksnotissued %}
+        <table id="errorlogs" class="tables">
+        <tr>
+          <th>Id</th>
+          <th>Book-Name</th>
+          <th>Issuers</th>
+          <th>Request-date</th>
+        </tr>
+     {% for x in booksnotconfirmed %}
+         <tr>
+            <td>
+             <p> <input type="hidden" name="notconfirmed[]" value=x.pk /> {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{ x.user }}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+      </table>
+
+      {%end if%}
+
+
+    <input class="submit"  type="submit" value=" Issue" style="position: relative; bottom:0; ">
+    </form> 
+
+    <button onclick="gohome()">Go Home</button>
+
+    {% block extra%}
+         <p>{{ ecomment }}</p>
+}
+}
+
+{% endblock %}
+  	
+
+
+
+
+{% endblock %}
+

@@ -20,7 +20,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^register', include('library_profile.urls')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^admin/log/', include('admin_interface.urls')),
+    url(r'^admin/', include('admin_interface.urls')),
     url(r'^search/', include('search.urls')),
     url(r'^', include('authentication.urls'))
 ]

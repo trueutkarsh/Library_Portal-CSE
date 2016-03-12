@@ -1,0 +1,56 @@
+
+{% extends "admin/base_site.html" %}
+
+{%block style%}
+{{block.super}}
+<style type="text/css">
+  .submit{
+    position: relative;
+    bottom: 0;
+  }
+  </style>
+{%endblock%}
+{%block script%}
+{{block.super}}
+<script>
+
+function goBack() {
+    window.history.back();
+}
+
+</script>
+{% block content %}
+	
+
+    {% if booksissued  %}
+    <p> Of Requests you selected these books have been issued.Let the user take the book. <br></p>
+      {% csrf_token %}
+      <table id="confirmedlogs" class="tables">
+        <tr>
+          <th>Id</th>
+          <th>Book-Name</th>
+          <th>Issuers</th>
+          <th>Request-date</th>
+        </tr>
+     {% for x in booksissued %}
+         <tr>
+            <td>
+             <p> <input type="hidden" name="confirmed[]" value=x.pk /> {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{ x.user }}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+      </table>
+   {% else %} 
+    <p>Sorry none of the requests could be completed.</p>
+  {% endif %}
+
+{% endblock %}
