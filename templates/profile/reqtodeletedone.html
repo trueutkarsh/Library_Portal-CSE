@@ -1,5 +1,5 @@
 
-{% extends "admin/base_site.html" %}
+{% extends "base.html" %}
 
 {%block style%}
 {{block.super}}
@@ -19,11 +19,11 @@ function goBack() {
 }
 </script>
 {%endblock%}
-{% block content %}
+{% block body %}
 	
 
-    {% if booksissued  %}
-    <p> Of Requests you selected these books have been issued.Let the user take the book. <br></p>
+    {% if requestsdeleted  %}
+    <p> Of Requests you selected these requests have been deleted.<br></p>
       {% csrf_token %}
       <table id="confirmedlogs" class="tables">
         <tr>
@@ -31,7 +31,7 @@ function goBack() {
           <th>Issuers</th>
           <th>Request-date</th>
         </tr>
-     {% for x in booksissued %}
+     {% for x in requestsdeleted %}
          <tr>
             <td>
                 {{x.book.title}}

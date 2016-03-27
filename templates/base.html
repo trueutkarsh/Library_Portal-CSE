@@ -21,6 +21,7 @@
     </head>
 
     <body>
+    {%block navbar%}
          <!-- Fixed navbar -->
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
           <div class="container">
@@ -33,13 +34,16 @@
               <a class="navbar-brand" href="/">Library Portal</a><br>
               <a class="logout-brand" href="/logout">Sign Out</a><br>
               <a href="{{ 'login'  }}?next={% firstof request.path 'home' %}">Login</a>
+              {% if  request.user.username  %}
+                <a class="logout-brand" href="/profile">Your Profile</a><br>
+              {%endif%}
               
               
             </div>
             </div><!--/.nav-collapse -->
           </div>
         </nav>
-
+    {%endblock%} 
 
 {% block user %}
 {% if  request.user.username  %}
@@ -49,7 +53,6 @@
 {%endif%}
 
 {%endblock%}
-			<input type="hidden" name="next" value="{{ next }}">
          {% block body %}{% endblock %}
          
          {% block extra%}

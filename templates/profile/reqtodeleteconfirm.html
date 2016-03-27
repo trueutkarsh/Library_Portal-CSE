@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{%block style%}
+{{block.super}}
+<style type="text/css">
+  .submit{
+    position: relative;
+    bottom: 0;
+  }
+  </style>
+{%endblock%}
+{%block script%}
+{{block.super}}
+<script>
+
+function gohome() {
+    window.location="/";
+}
+
+</script>
+{%endblock%}
+
+{% block body %}
+
+  <h2>Confirm Delete these requests</h2>
+    <form action="/profile/delreqdone/" method="post">
+      {% csrf_token %}
+      {%if bookstodelete %}
+        <table id="confirmedlogs" class="tables">
+          <tr>
+            <th>Id</th>
+            <th>Book-Name</th>
+            <th>Issuers</th>
+            <th>Request-date</th>
+          </tr>
+         {% for x in bookstodelete %}
+             <tr>
+                <td>
+                 <p> <input type="hidden" name="deletereqs[]" value="{{x.pk}}" /> {{x.pk}}</p>
+                </td>
+                <td>
+                    {{x.book.title}}
+                </td>
+                <td>
+                    {{ x.user }}
+                </td>
+                <td>
+                    {{x.date}}
+                </td>
+            </tr>
+          {% endfor %}
+        </table>
+        <input class="Submit"  type="submit" value="Delete Request">
+      {%endif%}
+
+      {% if booksnotdeleted %}
+      <h2>
+        Following requests have issue. Contact admin.
+      </h2>
+        <table id="errorlogs" class="tables">
+        <tr>
+          <th>Id</th>
+          <th>Book-Name</th>
+          <th>Issuers</th>
+          <th>Request-date</th>
+        </tr>
+     {% for x in booksnotissued %}
+         <tr>
+            <td>
+             <p> <input type="hidden" name="booksnotconfirmed[]" value="{{x.pk}}" /> {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{ x.user }}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+      </table>
+      {%endif%}
+    </form> 
+
+    <button class="Submit" onclick="gohome()">Go Home</button>
+
+
+    {% endblock %}
+    {% block extra %}
+         <p>{{ ecomment }}</p>
+    {% endblock %}
+  	
+
+
+
+
+

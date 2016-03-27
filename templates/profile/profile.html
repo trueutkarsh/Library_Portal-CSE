@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{%block body%}
+{% if currentrequests %}
+<div>
+<p>Your have requested the follwing books.</p>
+<div>
+<form action="/profile/delreqconfirm/" method="post">
+{% csrf_token %}
+<table id="requests">
+  <tr>
+    <th>Id</th>
+    <th>Book-Name</th>
+    <th>Request-date</th>
+<!--     <th>Expiry Date</th> -->
+  </tr>
+
+     {% for x in currentrequests %}
+         <tr>
+            <td>
+             <p><input type="checkbox" name="requestedbooks[]" value="{{x.id}}" />  {{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+<!--             <td>
+                {{x.expirydate}}
+            </td> -->
+        </tr>
+      {% endfor %}
+</table>
+    <input type="submit" value="Delete Request">
+
+</form>
+
+</div>
+</div>
+{% else %}
+<p>You have not requested any books</p>
+{%endif%}
+
+<br>
+
+{%if currentissued %}
+<table id="issued">
+  <tr>
+    <th>Id</th>
+    <th>Book-Name</th>
+    <th>Request-date</th>
+<!--     <th>Return Date</th>
+ -->  </tr>
+
+     {% for x in currentissued %}
+         <tr>
+            <td>
+             <p>{{x.pk}}</p>
+            </td>
+            <td>
+                {{x.book.title}}
+            </td>
+            <td>
+                {{x.date}}
+            </td>
+        </tr>
+      {% endfor %}
+</table>
+<hl>
+<p>To return book please submit it at library counter.  </p>
+{%else%}
+<p>You have not issued any books. Please issue :P .</p>
+{%endif%}
+{%endblock%}

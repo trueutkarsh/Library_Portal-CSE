@@ -115,3 +115,6 @@ LOGIN_URL='/login/'
 STATIC_URL = '/static/'
 
 #AUTH_PROFILE_MODULE='library_profile.libprofile'
+
+maxissuedays=7
+maxrequestdays=7
