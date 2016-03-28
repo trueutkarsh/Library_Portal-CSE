@@ -18,7 +18,8 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 admin.autodiscover()
 urlpatterns = [
-    url(r'^register', include('library_profile.urls')),
+    url(r'^register/', include('library_profile.urls')),
+    url(r'^profile/', include('library_profile.urls_profile')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/', include('admin_interface.urls')),
     url(r'^search/', include('search.urls')),

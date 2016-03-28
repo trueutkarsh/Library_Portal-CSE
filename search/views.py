@@ -37,7 +37,7 @@ def searchit(request):
 
             if book_search!="":
                 #empty book name search with authors
-                books=Book.objects.all().filter(title__icontains=book_search)
+                books=Book.objects.all().filter(title__contains=book_search)
                 if author_search!="":
                     books.filter(Q(authors__last_name__contains=author_search) | Q(authors__first_name__contains=author_search))
                     #if publisher_name
